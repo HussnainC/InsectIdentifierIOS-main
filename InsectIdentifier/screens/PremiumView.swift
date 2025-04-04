@@ -6,21 +6,24 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct TabModel: Identifiable {
     let id: Int
     let title: String
-    let planId: String = ""
+    let planId:String
 }
 
 struct PremiumView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State private var selectedTab: Int = 1
-    
+    @EnvironmentObject var proState: ProState
+    @State private var selectedTab: Int = 0
+   
+   
     private let tabs: [TabModel] = [
-        TabModel(id: 1, title: "weekly"),
-        TabModel(id: 2, title: "monthly"),
-        TabModel(id: 3, title: "yearly")
+        TabModel(id: 0, title: "weekly",planId: ProductKeys.weekly),
+        TabModel(id: 1, title: "monthly",planId: ProductKeys.monthly),
+        TabModel(id: 2, title: "yearly",planId: ProductKeys.yearly)
     ]
     
     var body: some View {
@@ -35,9 +38,8 @@ struct PremiumView: View {
             ImageLabel(icon: "ads_stop", label: "afe")
             
             tabSelectionView
-            
-            PremiumBoard(price: "$34.99", title: "per_month")
-            
+            ProductView(id: tabs[selectedTab].planId).productViewStyle( PremiumBoardStyle())
+
             Text("per_des")
                 .font(.footnote)
                 .foregroundColor(.gray)
@@ -45,11 +47,71 @@ struct PremiumView: View {
                 .padding()
             
             Spacer()
-            bottomBar
+            Button(action: {
+                Task {
+                    await purchaseSelectedProduct(tabId: tabs[selectedTab].planId)
+                   }
+            }) {
+                Text("pu")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .clipShape(Capsule())
+            }
+            .padding(.bottom, 12)
         }
         .padding(.horizontal,15).navigationBarBackButtonHidden()
     }
     
+    
+    
+    @MainActor
+    private func purchaseSelectedProduct(tabId:String) async {
+        let selectedProduct = proState.products?.first(where: { $0.id == tabId })
+        guard let selectedProduct else {
+            print("Product not found.")
+            return
+        }
+        do {
+            let result = try await selectedProduct.purchase()
+
+            switch result {
+            case .success(let verification):
+                switch verification {
+                case .verified(let transaction):
+                    print("Purchase successful")
+                    proState.refreshState()
+                    await transaction.finish()
+                    
+                case .unverified(_, let error):
+                    print("Unverified transaction: \(error)")
+                }
+            case .userCancelled:
+                print("User cancelled the purchase.")
+            case .pending:
+                print("Purchase is pending approval.")
+            @unknown default:
+                break
+            }
+
+        } catch {
+            print("Purchase failed: \(error)")
+        }
+    }
+    struct PremiumBoardStyle:ProductViewStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            switch configuration.state{
+            case.loading:
+                PremiumBoard(price: "Loading..", title: "")
+            case .success(let product):
+                PremiumBoard(price: product.displayPrice, title: product.description)
+            default:
+                EmptyView()
+            }
+        }
+    }
+   
     private var topBar: some View {
         
         HStack {
@@ -86,17 +148,7 @@ struct PremiumView: View {
         .clipShape(Capsule())
     }
     
-    private var bottomBar: some View {
-        Button(action: {}) {
-            Text("pu")
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .clipShape(Capsule())
-        }
-        .padding(.bottom, 12)
-    }
+   
 }
 
 struct TabIndicator: View {
@@ -162,5 +214,5 @@ struct PremiumBoard: View {
 }
 
 #Preview {
-    PremiumView()
+    PremiumView().environmentObject(ProState())
 }

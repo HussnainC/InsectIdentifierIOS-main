@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7E1562032D9FA917000201E1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E1562022D9FA917000201E1 /* StoreKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		7E1562022D9FA917000201E1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		7ED6CAAF2D8095D900332216 /* InsectIdentifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InsectIdentifier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -36,16 +41,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E1562032D9FA917000201E1 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E1562012D9FA917000201E1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7E1562022D9FA917000201E1 /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7ED6CAA62D8095D900332216 = {
 			isa = PBXGroup;
 			children = (
 				7ED6CAB12D8095D900332216 /* InsectIdentifier */,
+				7E1562012D9FA917000201E1 /* Frameworks */,
 				7ED6CAB02D8095D900332216 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -273,7 +288,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"InsectIdentifier/Preview Content\"";
-				DEVELOPMENT_TEAM = Z6CKUD5693;
+				DEVELOPMENT_TEAM = DP25JZZ9PN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = InsectIdentifier/Info.plist;

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var destination: Int? = nil
+    @EnvironmentObject var proState: ProState
     var body: some View {
         VStack {
             topBar
@@ -22,6 +23,8 @@ struct HomeView: View {
                 CameraScreen()
             }else if(destination==3){
                 GalleryScreen()
+            }else if(destination==4){
+                PremiumView()
             }
         }
     }
@@ -52,10 +55,13 @@ struct HomeView: View {
             VStack(spacing: 20) {
                 Text("home_top")
                     .font(.body)
-                
                     .frame(maxWidth: .infinity, alignment: .leading)
-                
-                PremiumBoard(price: "Rs 3456.0", title: "Per Month")
+                Button(action:{
+                    destination = 4
+                },label: {
+                    PremiumBoard(price:"\(proState.products?.first?.price ?? 0)", title: "\(proState.products?.first?.description ?? "")")
+                }).buttonStyle(PlainButtonStyle())
+               
                 
                 HomeButton(  title: NSLocalizedString("buttont_1", comment:""),
                              description: NSLocalizedString("button_des_1", comment:""),
