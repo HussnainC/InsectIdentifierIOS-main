@@ -38,8 +38,9 @@ struct PremiumView: View {
             ImageLabel(icon: "ads_stop", label: "afe")
             
             tabSelectionView
-            ProductView(id: tabs[selectedTab].planId).productViewStyle( PremiumBoardStyle())
-
+            let currentProduct = proState.getProduct(id: tabs[selectedTab].planId)
+            PremiumBoard(price: currentProduct?.displayPrice ?? "", title: currentProduct?.description ?? "")
+          
             Text("per_des")
                 .font(.footnote)
                 .foregroundColor(.gray)
@@ -48,8 +49,9 @@ struct PremiumView: View {
             
             Spacer()
             Button(action: {
+               
                 Task {
-                    await purchaseSelectedProduct(tabId: tabs[selectedTab].planId)
+                    await purchaseSelectedProduct(product: currentProduct)
                    }
             }) {
                 Text("pu")
@@ -67,14 +69,13 @@ struct PremiumView: View {
     
     
     @MainActor
-    private func purchaseSelectedProduct(tabId:String) async {
-        let selectedProduct = proState.products?.first(where: { $0.id == tabId })
-        guard let selectedProduct else {
+    private func purchaseSelectedProduct(product:Product?) async {
+        guard let product else {
             print("Product not found.")
             return
         }
         do {
-            let result = try await selectedProduct.purchase()
+            let result = try await product.purchase()
 
             switch result {
             case .success(let verification):
@@ -99,18 +100,7 @@ struct PremiumView: View {
             print("Purchase failed: \(error)")
         }
     }
-    struct PremiumBoardStyle:ProductViewStyle {
-        func makeBody(configuration: Configuration) -> some View {
-            switch configuration.state{
-            case.loading:
-                PremiumBoard(price: "Loading..", title: "")
-            case .success(let product):
-                PremiumBoard(price: product.displayPrice, title: product.description)
-            default:
-                EmptyView()
-            }
-        }
-    }
+  
    
     private var topBar: some View {
         

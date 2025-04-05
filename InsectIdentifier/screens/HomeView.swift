@@ -59,7 +59,8 @@ struct HomeView: View {
                 Button(action:{
                     destination = 4
                 },label: {
-                    PremiumBoard(price:"\(proState.products?.first?.price ?? 0)", title: "\(proState.products?.first?.description ?? "")")
+                    let product = proState.getProduct(id: ProductKeys.monthly)
+                    PremiumBoard(price:product?.displayPrice ?? "", title: product?.description ?? "")
                 }).buttonStyle(PlainButtonStyle())
                
                 

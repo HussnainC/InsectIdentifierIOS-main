@@ -11,7 +11,8 @@ import StoreKit
 class ProState: ObservableObject {
     @Published  var  isProUser: Bool = false
     @Published var products: [Product]?
-    
+    @Published var credits: Int = 0
+    private var dailyCreditTask: Task<Void, Never>?
     init(){
         refreshState()
         Task{
@@ -24,6 +25,10 @@ class ProState: ObservableObject {
                await self.checkActiveSubscription()
            }
        
+    }
+    
+    func getProduct(id: String) -> Product? {
+        return  products?.first(where: { $0.id == id })
     }
     
     @MainActor

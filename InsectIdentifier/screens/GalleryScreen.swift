@@ -16,6 +16,7 @@ struct GalleryScreen: View {
     @StateObject var viewModel = GalleryViewModel()
     @State private var isThreadScreen: Bool = false
     @State private var selectedItem: FileItem?=nil
+
     var body: some View {
         VStack {
             TopBarView(title: "gallery", onBack: {

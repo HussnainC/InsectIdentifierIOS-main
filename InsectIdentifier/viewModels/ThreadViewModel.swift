@@ -13,6 +13,7 @@ import Photos
 
 class ThreadViewModel: ObservableObject {
     private var fileItem: FileItem?
+    private var isProUser: Bool = false
     @Published var conversation: [ThreadItem] = []
     private let geminiKey = "AIzaSyB8Bj4s_H1dTEIRcg5iMSiWVDQc7o1HZkY"
     private var isWaitingForResponse = false
@@ -20,8 +21,10 @@ class ThreadViewModel: ObservableObject {
     
     init(fileItem: FileItem?) {
         self.fileItem = fileItem
-        
         sendMessage(message: "What it is?")
+    }
+    func setIsPro(isPro:Bool){
+        self.isProUser = isPro
     }
     
     func sendMessage(message: String) {
@@ -40,10 +43,31 @@ class ThreadViewModel: ObservableObject {
         
         self.conversation.append(ThreadItem(id: self.conversation.count + 1, isUser: false, threadState: .loading))
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            
-            
-            self.fetchGeminiResponse(for: userThread.threadState)
+            if(self.isProUser || TimeManager.shared.isNewDay()){
+                self.fetchGeminiResponse(for: userThread.threadState)
+            }else{
+                self.setPremiumResponse()
+            }
+          
         }
+    }
+    private func setPremiumResponse(){
+        conversation = conversation.map { item in
+            if !item.isUser, case .loading = item.threadState {
+                return ThreadItem(
+                    id: item.id,
+                    isUser: false,
+                    threadState: .pro(
+                       "Subscribe to get more responses! for free every day you will get one response. Try it now!"
+                    )
+                )
+            }
+            return item
+        }
+        print("Done Pro")
+        fileItem = nil
+        isWaitingForResponse = false
+        
     }
     private func fetchGeminiResponse(for threadState: ThreadState) {
         guard case .success(let threadItem) = threadState else { return }
@@ -133,6 +157,7 @@ class ThreadViewModel: ObservableObject {
             }
             return item
         }
+        TimeManager.shared.setLastExecutionDate()
         print("Done")
         fileItem = nil
         isWaitingForResponse = false

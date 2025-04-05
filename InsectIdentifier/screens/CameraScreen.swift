@@ -16,6 +16,7 @@ struct CameraScreen: View {
     
     @State private  var latestImagePath: String? = nil
     @State private var isImageCapured :Bool = false
+   
     var body: some View {
         ZStack {
             if(isCameraAllowed){

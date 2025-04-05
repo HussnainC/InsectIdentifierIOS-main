@@ -11,18 +11,20 @@ import Photos
 
 
 #Preview {
-    ThreadScreen(fileItem:nil)
+   
+  ThreadScreen(fileItem:nil).environmentObject(ProState())
 }
 struct ThreadScreen: View {
     @Environment(\.presentationMode) var presentationMode
-    
+
     @State private var textInput: String = ""
     @StateObject var viewModel: ThreadViewModel
-    
+    @EnvironmentObject private var proState: ProState
+    @State private var showProView: Bool = false
     init(fileItem: FileItem?) {
-        _viewModel = StateObject(wrappedValue: ThreadViewModel(fileItem: fileItem))
+        _viewModel = StateObject(wrappedValue: ThreadViewModel(fileItem:fileItem))
     }
-
+    
     var body: some View {
         VStack {
             TopBarView(title: "", onBack: {
@@ -37,7 +39,9 @@ struct ThreadScreen: View {
                             if item.isUser {
                                 UserPromptView(item: item)
                             } else {
-                                AIResponseView(item: item)
+                                AIResponseView(item: item,onProClick: {
+                                    showProView=true
+                                })
                             }
                         }
                     }
@@ -48,7 +52,11 @@ struct ThreadScreen: View {
             
             
             bottomBar
-        }.navigationBarBackButtonHidden()
+        }.navigationBarBackButtonHidden().onAppear{
+            viewModel.setIsPro(isPro:proState.isProUser)
+        }.navigationDestination(isPresented: $showProView) {
+            PremiumView()
+        }
     }
     
     
@@ -85,7 +93,7 @@ struct UserPromptView: View {
     @State private var uiImage: UIImage?
     var body: some View {
         HStack(alignment:.top) {
-          
+            
             Spacer()
             if case .success(let successData) = item.threadState {
                 VStack(alignment: .leading){
@@ -97,16 +105,16 @@ struct UserPromptView: View {
                                 .frame( maxHeight: 120)
                                 .frame(maxWidth:200)
                                 .clipped()
-                           
+                            
                         } else {
                             ProgressView()
                                 .frame(height: 150)
                         }
-                       
+                        
                     }
                     Text(successData.prompt)
                         .padding(10)
-                       
+                    
                 } .clipShape(RoundedRectangle(cornerRadius: 20)).background(RoundedRectangle(cornerRadius: 20).fill(Color(.systemGray5)))
                     .shadow(radius: 3).onAppear{
                         if successData.attachedUri != nil{
@@ -161,7 +169,7 @@ struct UserPromptView: View {
 
 struct AIResponseView: View {
     var item: ThreadItem
-    
+    let onProClick :()->Void?
     var body: some View {
         HStack(alignment:.top) {
             AIIndicator()
@@ -174,18 +182,33 @@ struct AIResponseView: View {
                         .flatMap { $0 }
                         .compactMap { $0.text }
                         .joined(separator: " ") ?? ""
+                case .pro(let proMessage):
+                    return proMessage
                 case .error:
                     return NSLocalizedString("ftgr", comment: "Failed to get response")
                 case .loading:
                     return NSLocalizedString("loading", comment: "Loading...")
                 }
             }()
-
-          
-            Text( message)
-            .padding()
-            .background(RoundedRectangle(cornerRadius: 20).fill(Color.blue.opacity(0.2)))
-            .shadow(radius: 3)
+            VStack{
+                Text(message)
+                if case .pro = item.threadState {
+                    HStack{
+                        Spacer()
+                        Button(action:{
+                            onProClick()
+                        },label: {
+                            Text("Try Pro").foregroundColor(Color.white).padding(.horizontal).padding(.vertical,10).frame(width: 150)
+                        }).background(Color.primaryColor).clipShape(RoundedRectangle(cornerRadius: 20))
+                    }
+                   
+                }
+              
+                
+            }.padding()
+                .background(RoundedRectangle(cornerRadius: 20).fill(Color.blue.opacity(0.2)))
+                .shadow(radius: 3)
+           
             Spacer()
         }
     }

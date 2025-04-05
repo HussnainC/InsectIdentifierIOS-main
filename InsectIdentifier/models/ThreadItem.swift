@@ -17,6 +17,7 @@ enum ThreadState {
     case loading
     case error
     case success(SuccessData)
+    case pro(String)
 
     struct SuccessData {
         let prompt: String
