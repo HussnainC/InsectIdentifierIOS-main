@@ -25,13 +25,19 @@ struct LanguageScreenView: View {
    
     var body: some View {
         VStack {
-            TopBarView(title: "cl",onBack: {
-                if(!isFirstRun)
-                {
+           
+            if(isFirstRun){
+                HStack{
+                    Text("cl")
+                        .font(.system(size: 20, weight: .semibold))
+                    Spacer()
+                }.padding()
+            }else{
+                TopBarView(title: "cl",onBack: {
                     presentationMode.wrappedValue.dismiss()
-                }
-                   
-            }).padding()
+                }).padding()
+            }
+           
             ScrollView {
                 LazyVStack {
                     ForEach(languages) { item in

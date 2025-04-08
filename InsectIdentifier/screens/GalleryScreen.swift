@@ -15,7 +15,9 @@ struct GalleryScreen: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     @StateObject var viewModel = GalleryViewModel()
     @State private var isThreadScreen: Bool = false
+    @State private var isProScreen: Bool = false
     @State private var selectedItem: FileItem?=nil
+    @EnvironmentObject var proState: ProState
 
     var body: some View {
         VStack {
@@ -28,8 +30,13 @@ struct GalleryScreen: View {
                 LazyVGrid(columns: columns, spacing: 10) {
                     ForEach(viewModel.images) { file in
                         GalleryItem(fileItem: file,onItemClick: {
-                            selectedItem = file
-                            isThreadScreen=true
+                            if(proState.isProUser || TimeManager.shared.isNewDay()){
+                                selectedItem = file
+                                isThreadScreen=true
+                            }else{
+                                isProScreen=true
+                            }
+                           
                         })
                             .frame(maxWidth: .infinity)
                     }
@@ -40,6 +47,10 @@ struct GalleryScreen: View {
         }.navigationBarBackButtonHidden().navigationDestination(isPresented: $isThreadScreen, destination: {
             if(isThreadScreen ){
                 ThreadScreen(fileItem:selectedItem)
+            }
+        }).navigationDestination(isPresented: $isProScreen, destination: {
+            if(isProScreen ){
+                PremiumView()
             }
         }).onAppear{
             checkPhotoLibraryPermission { isPermissionAllowed in
@@ -123,5 +134,5 @@ private func checkPhotoLibraryPermission(completion: @escaping (Bool) -> Void) {
     }
 }
 #Preview {
-    GalleryScreen()
+    GalleryScreen().environmentObject(ProState())
 }

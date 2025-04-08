@@ -59,7 +59,7 @@ struct HomeView: View {
                 Button(action:{
                     destination = 4
                 },label: {
-                    let product = proState.getProduct(id: ProductKeys.monthly)
+                    let product = proState.getProduct(id: ProductKeys.weekly)
                     PremiumBoard(price:product?.displayPrice ?? "", title: product?.description ?? "")
                 }).buttonStyle(PlainButtonStyle())
                
@@ -126,5 +126,5 @@ struct HomeView: View {
 
 
 #Preview {
-    HomeView()
+    HomeView().environmentObject(ProState())
 }

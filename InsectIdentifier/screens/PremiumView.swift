@@ -21,9 +21,9 @@ struct PremiumView: View {
    
    
     private let tabs: [TabModel] = [
-        TabModel(id: 0, title: "weekly",planId: ProductKeys.weekly),
-        TabModel(id: 1, title: "monthly",planId: ProductKeys.monthly),
-        TabModel(id: 2, title: "yearly",planId: ProductKeys.yearly)
+        TabModel(id: 0, title: "weekly",planId: ProductKeys.weekly)
+//        TabModel(id: 1, title: "monthly",planId: ProductKeys.monthly),
+//        TabModel(id: 2, title: "yearly",planId: ProductKeys.yearly)
     ]
     
     var body: some View {
