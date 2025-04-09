@@ -8,15 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
-
+    @EnvironmentObject var adVm: InterstitialViewModel
     var body: some View {
-        NavigationStack {
-            SplashView()
+        ZStack{
+            NavigationStack {
+                ZStack{
+                    SplashView()
+                }
+               
+            }
+            if adVm.isLoadingAd {
+                Color.white.ignoresSafeArea()
+                              ProgressView("Loading Ad...")
+                                  .padding()
+                                  .background(Color.white)
+                                  .cornerRadius(10)
+            }
         }
+        
     }
 
 }
 
 #Preview {
-    ContentView()
+    ContentView().environmentObject(InterstitialViewModel())
 }

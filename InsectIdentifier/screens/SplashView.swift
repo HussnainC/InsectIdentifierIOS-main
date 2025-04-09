@@ -10,7 +10,7 @@ import SwiftUI
 struct SplashView: View {
     @State var isActive: Bool = false
     @AppStorage(AppConstants.FIRST_RUN_KEY) private var isFirstRun :Bool = true
-
+    @EnvironmentObject private var proState:ProState
     var body: some View {
         ZStack {
             ZStack{
@@ -57,7 +57,13 @@ struct SplashView: View {
             if(isFirstRun){
                 LanguageScreenView()
             }else{
-                HomeView()
+                if(proState.isProUser){
+                    HomeView()
+                }else
+                {
+                    IntroView(currentPage: 2)
+                }
+                
             }
         }
     }

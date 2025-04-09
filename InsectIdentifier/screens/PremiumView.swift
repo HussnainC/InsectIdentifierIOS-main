@@ -18,14 +18,16 @@ struct PremiumView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var proState: ProState
     @State private var selectedTab: Int = 0
-   
-   
+    @EnvironmentObject var adVm: InterstitialViewModel
+    
+    @State var fromSplash: Bool = false
+    @State private var moveToHome: Bool = false
     private let tabs: [TabModel] = [
         TabModel(id: 0, title: "weekly",planId: ProductKeys.weekly)
 //        TabModel(id: 1, title: "monthly",planId: ProductKeys.monthly),
 //        TabModel(id: 2, title: "yearly",planId: ProductKeys.yearly)
     ]
-    
+   
     var body: some View {
         VStack {
             topBar
@@ -63,7 +65,9 @@ struct PremiumView: View {
             }
             .padding(.bottom, 12)
         }
-        .padding(.horizontal,15).navigationBarBackButtonHidden()
+        .padding(.horizontal,15).navigationBarBackButtonHidden().navigationDestination(isPresented: $moveToHome) {
+            HomeView()
+        }
     }
     
     
@@ -115,7 +119,15 @@ struct PremiumView: View {
             Spacer()
             
             Button(action: {
-                presentationMode.wrappedValue.dismiss()
+                if(fromSplash){
+                    if(!proState.isProUser){
+                        adVm.loadAndShowAd()
+                    }
+                    moveToHome=true
+                }else{
+                    presentationMode.wrappedValue.dismiss()
+                }
+               
             }) {
                 Image("ic_close")
                     .resizable()
@@ -204,5 +216,5 @@ struct PremiumBoard: View {
 }
 
 #Preview {
-    PremiumView().environmentObject(ProState())
+    PremiumView().environmentObject(ProState()).environmentObject(InterstitialViewModel())
 }

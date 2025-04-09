@@ -14,10 +14,13 @@ struct IntroView: View {
         IntroModel(title: "introt2", description: "introd2", image:"intro_2"),
         IntroModel(title: "introt3", description: "introd3", image:"intro_3")
     ]
-    @State private var currentPage = 0
-    
+    @State  var currentPage = 0
+    @EnvironmentObject var proState: ProState
+    @EnvironmentObject var adVm: InterstitialViewModel
     @State private var moveOnHomePage: Bool = false
     @State private var moveOnPremiumPage: Bool = false
+    
+
     var body: some View {
         ZStack{
             TabView(selection: $currentPage) {
@@ -62,7 +65,11 @@ struct IntroView: View {
                         .padding(.horizontal,15)
                     
                     Button(action: {
-                        
+                        if(pages.count-1 == currentPage){
+                            if(!proState.isProUser){
+                                adVm.loadAndShowAd()
+                            }
+                        }
                         isFirstRun=false
                         moveOnHomePage=true
                         
@@ -78,10 +85,11 @@ struct IntroView: View {
                     .cornerRadius(20).shadow(radius:2).padding(.horizontal, 30)
                 Spacer().frame(height: UIScreen.main.bounds.height * 0.05)
             }
+            
         }.navigationBarBackButtonHidden().navigationDestination(isPresented:$moveOnHomePage) {
             HomeView()
         }.navigationDestination(isPresented:$moveOnPremiumPage) {
-            PremiumView()
+            PremiumView(fromSplash: true)
         }
         
     }
@@ -89,5 +97,5 @@ struct IntroView: View {
 
 
 #Preview {
-    IntroView()
+    IntroView().environmentObject(ProState()).environmentObject(InterstitialViewModel())
 }

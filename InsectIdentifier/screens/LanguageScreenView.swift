@@ -13,6 +13,7 @@ struct LanguageScreenView: View {
     @AppStorage(AppConstants.LANG_CODE_KEY) private var langCode: String = "en"
     @AppStorage(AppConstants.FIRST_RUN_KEY) private var isFirstRun :Bool = true
     @State private var navigateToIntro = false
+
     private let languages = [
         LanguageModel(name: "en",code: "en"),
         LanguageModel(name: "es",code: "es"),
@@ -24,6 +25,7 @@ struct LanguageScreenView: View {
     ]
    
     var body: some View {
+        
         VStack {
            
             if(isFirstRun){

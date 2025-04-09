@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7E1562032D9FA917000201E1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E1562022D9FA917000201E1 /* StoreKit.framework */; };
+		7EEC27D32DA68B390021DCD8 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 7EEC27D22DA68B390021DCD8 /* GoogleMobileAds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EEC27D32DA68B390021DCD8 /* GoogleMobileAds in Frameworks */,
 				7E1562032D9FA917000201E1 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,6 +95,7 @@
 			);
 			name = InsectIdentifier;
 			packageProductDependencies = (
+				7EEC27D22DA68B390021DCD8 /* GoogleMobileAds */,
 			);
 			productName = InsectIdentifier;
 			productReference = 7ED6CAAF2D8095D900332216 /* InsectIdentifier.app */;
@@ -128,6 +131,9 @@
 			);
 			mainGroup = 7ED6CAA62D8095D900332216;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7EEC27D12DA68B390021DCD8 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7ED6CAB02D8095D900332216 /* Products */;
 			projectDirPath = "";
@@ -302,6 +308,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -347,6 +354,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -389,6 +397,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7EEC27D12DA68B390021DCD8 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7EEC27D22DA68B390021DCD8 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7EEC27D12DA68B390021DCD8 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7ED6CAA72D8095D900332216 /* Project object */;
 }
