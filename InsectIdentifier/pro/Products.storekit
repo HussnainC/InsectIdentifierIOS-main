@@ -74,7 +74,7 @@
       "localizations" : [
 
       ],
-      "name" : "Subscriptions",
+      "name" : "subscriptions",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -95,7 +95,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.aj.spiderid.bug.insect.identifier.weekly",
+          "productID" : "week_subs",
           "recurringSubscriptionPeriod" : "P1W",
           "referenceName" : "Weekly",
           "subscriptionGroupID" : "617E0460",

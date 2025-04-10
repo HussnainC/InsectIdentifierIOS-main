@@ -6,7 +6,7 @@
 //
 
 struct ProductKeys{
-    static let weekly = "com.aj.spiderid.bug.insect.identifier.weekly"
+    static let weekly = "week_subs"
     static let monthly = "com.aj.spiderid.bug.insect.identifier.monthly"
     static let yearly = "com.aj.spiderid.bug.insect.identifier.yearly"
 }
