@@ -22,6 +22,8 @@ struct PremiumView: View {
     
     @State var fromSplash: Bool = false
     @State private var moveToHome: Bool = false
+    @State private var showToast = false
+    @State private var toastMessage = ""
     private let tabs: [TabModel] = [
         TabModel(id: 0, title: "weekly",planId: ProductKeys.weekly)
 //        TabModel(id: 1, title: "monthly",planId: ProductKeys.monthly),
@@ -29,48 +31,133 @@ struct PremiumView: View {
     ]
    
     var body: some View {
-        VStack {
-            topBar
-            Spacer()
-            Image("premium_img")
-                .resizable()
-                .scaledToFit()
-                .frame(height: 140).frame(maxWidth: .infinity)
-            
-            ImageLabel(icon: "ads_stop", label: "afe")
-            
-            tabSelectionView
-            let currentProduct = proState.getProduct(id: tabs[selectedTab].planId)
-            PremiumBoard(price: currentProduct?.displayPrice ?? "", title: currentProduct?.description ?? "")
-          
-            Text("per_des")
-                .font(.footnote)
-                .foregroundColor(.gray)
-                .multilineTextAlignment(.center)
-                .padding()
-            
-            Spacer()
-            Button(action: {
+        ZStack{
+            VStack {
+                topBar
+                let currentProduct = proState.getProduct(id: tabs[selectedTab].planId)
+                Spacer()
+                ScrollView{
+                    VStack{
+                        Image("premium_img")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 140).frame(maxWidth: .infinity)
+                        
+                        ImageLabel(icon: "ads_stop", label: "afe")
+                        
+                        tabSelectionView
+                        
+                        PremiumBoard(price: currentProduct?.displayPrice ?? "", title: currentProduct?.description ?? "")
+                      
+                        Text("per_des")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        
+                    }
+                }
+              
+                Spacer()
+                Button(action: {
+                   
+                    Task {
+                        await purchaseSelectedProduct(product: currentProduct)
+                       }
+                }) {
+                    Text("pu")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .clipShape(Capsule())
+                }
+                HStack(spacing: 10) {
+                           LinkText("Restore") {
+                               Task {
+                                   do {
+                                       try await AppStore.sync()
+                                       proState.refreshState()
+                                       showToast(message: "Restore completed!")
+                                   } catch {
+                                       showToast(message: "Failed to restore: \(error.localizedDescription)")
+                                   }
+                               }
+                           }
+                           
+                           Divider()
+                               .frame(height: 20)
+                               .background(Color.blue)
+
+                           LinkText("Terms of Use") {
+                            
+                               if let url = URL(string: "https://sites.google.com/view/spider-id-privacy-policy/terms-of-usage") {
+                                   UIApplication.shared.open(url)
+                               }
+                           }
+
+                           Divider()
+                               .frame(height: 20)
+                               .background(Color.blue)
+
+                           LinkText("Policy") {
+                               if let url = URL(string: "https://sites.google.com/view/spider-id-privacy-policy/home") {
+                                   UIApplication.shared.open(url)
+                               }
+                           }
+                       }
+                       .font(.system(size: 14, weight: .semibold))
+                       .foregroundColor(Color.primaryColor)
+                     
+                       .padding()
+              
                
-                Task {
-                    await purchaseSelectedProduct(product: currentProduct)
-                   }
-            }) {
-                Text("pu")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .clipShape(Capsule())
             }
-            .padding(.bottom, 12)
+            if showToast {
+                    VStack {
+                        Spacer()
+                        Text(toastMessage)
+                            .padding()
+                            .background(Color.black.opacity(0.8))
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .padding(.bottom, 40)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                            .animation(.easeInOut, value: showToast)
+                    }
+                }
         }
+       
         .padding(.horizontal,15).navigationBarBackButtonHidden().navigationDestination(isPresented: $moveToHome) {
             HomeView()
         }
     }
-    
-    
+    struct LinkText: View {
+        var title: String
+        var action: () -> Void
+        
+        init(_ title: String, action: @escaping () -> Void) {
+            self.title = title
+            self.action = action
+        }
+        
+        var body: some View {
+            Button(action: action) {
+                Text(title)
+                    .underline()
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
+    }
+    func showToast(message: String, duration: Double = 2.0) {
+        toastMessage = message
+        showToast = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            withAnimation {
+                showToast = false
+            }
+        }
+    }
     
     @MainActor
     private func purchaseSelectedProduct(product:Product?) async {

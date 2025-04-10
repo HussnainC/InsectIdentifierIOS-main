@@ -56,21 +56,24 @@ struct HomeView: View {
                 Text("home_top")
                     .font(.body)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Button(action:{
-                    destination = 4
-                },label: {
-                    let product = proState.getProduct(id: ProductKeys.weekly)
-                    PremiumBoard(price:product?.displayPrice ?? "", title: product?.description ?? "")
-                }).buttonStyle(PlainButtonStyle())
-               
+                if !proState.isProUser {
+                    Button(action:{
+                        destination = 4
+                    },label: {
+                        let product = proState.getProduct(id: ProductKeys.weekly)
+                        PremiumBoard(price:product?.displayPrice ?? "", title: product?.description ?? "")
+                    }).buttonStyle(PlainButtonStyle())
+                }
+              
+                
                 
                 HomeButton(  title: NSLocalizedString("buttont_1", comment:""),
                              description: NSLocalizedString("button_des_1", comment:""),
-                
-                    iconName: "img_insect",
-                    onClick: {
-                        destination=2
-                    }
+                             
+                             iconName: "img_insect",
+                             onClick: {
+                    destination=2
+                }
                 )
                 
                 HomeButton(
