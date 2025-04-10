@@ -20,7 +20,7 @@ class InterstitialViewModel: NSObject, ObservableObject, FullScreenContentDelega
         Task {
             do {
                 let ad = try await InterstitialAd.load(
-                    with: "ca-app-pub-3940256099942544/4411468910",
+                    with: "ca-app-pub-9211759810106994/5520272609",
                     request: Request()
                 )
                 ad.fullScreenContentDelegate = self
