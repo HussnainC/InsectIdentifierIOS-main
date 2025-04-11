@@ -43,9 +43,12 @@ struct PremiumView: View {
                             .scaledToFit()
                             .frame(height: 140).frame(maxWidth: .infinity)
                         
-                        ImageLabel(icon: "ads_stop", label: "afe")
-                        
-                        tabSelectionView
+                      //  ImageLabel(icon: "ads_stop", label: "afe")
+                        ImageLabel(icon: "lang_check", label: "Identify unlimited insects & spiders")
+                        ImageLabel(icon: "lang_check", label: "Unlock educational facts")
+                        ImageLabel(icon: "lang_check", label: "Get location-based insights")
+                        ImageLabel(icon: "lang_check", label: "Remove annoying paywalls")
+                       // tabSelectionView
                         
                         PremiumBoard(price: currentProduct?.displayPrice ?? "", title: currentProduct?.description ?? "")
                       
@@ -263,8 +266,7 @@ struct ImageLabel: View {
     var body: some View {
         HStack(spacing: 10) {
             Image(icon)
-                .resizable()
-                .frame(width: 30, height: 30)
+
             Text(NSLocalizedString(label, comment: ""))
                 .font(.headline)
             Spacer()
