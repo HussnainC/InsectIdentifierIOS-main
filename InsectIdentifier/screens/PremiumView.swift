@@ -268,7 +268,7 @@ struct ImageLabel: View {
             Image(icon)
 
             Text(NSLocalizedString(label, comment: ""))
-                .font(.headline)
+                .font(.system(size: 15))
             Spacer()
         }
     }
