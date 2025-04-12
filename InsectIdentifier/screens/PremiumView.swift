@@ -94,7 +94,7 @@ struct PremiumView: View {
 
                            LinkText("Terms of Use") {
                             
-                               if let url = URL(string: "https://sites.google.com/view/spider-id-privacy-policy/terms-of-usage") {
+                               if let url = URL(string: "https://sites.google.com/view/spiderid-bugid-privacypolicy/terms-of-usage") {
                                    UIApplication.shared.open(url)
                                }
                            }
@@ -104,7 +104,7 @@ struct PremiumView: View {
                                .background(Color.blue)
 
                            LinkText("Policy") {
-                               if let url = URL(string: "https://sites.google.com/view/spider-id-privacy-policy/home") {
+                               if let url = URL(string: "https://sites.google.com/view/spiderid-bugid-privacypolicy/home") {
                                    UIApplication.shared.open(url)
                                }
                            }
@@ -135,6 +135,7 @@ struct PremiumView: View {
             HomeView()
         }
     }
+  
     struct LinkText: View {
         var title: String
         var action: () -> Void

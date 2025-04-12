@@ -36,7 +36,7 @@
 "cl" = "Change Languages";
 "afe" = "Ad-Free Experience";
 "per_month" = "Per Month";
-"per_des" = "This subscription will automatically extend for the same duration unless canceled at least 24 hours before te current period ends. You can manage this subscription from Play Store > Menu > Subscriptions. If you subscribed this offer a cancel button will appear here so you can cancel it any time. By proceeding confirm that you accept Agreement and Privacy Policy.";
+"per_des" = "This subscription will automatically extend for the same duration unless canceled at least 24 hours before te current period ends. You can manage this subscription from Play Store > Menu > Subscriptions. If you subscribed this offer a cancel button will appear here so you can cancel it any time. By proceeding confirm that you accept [Agreement](https://sites.google.com/view/spiderid-bugid-privacypolicy/terms-of-usage) and [Privacy Policy](https://sites.google.com/view/spiderid-bugid-privacypolicy/home).";
 "weekly" = "Weekly";
 "monthly" = "Monthly";
 "yearly" = "Yearly";
