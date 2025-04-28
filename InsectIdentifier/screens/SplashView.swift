@@ -61,7 +61,7 @@ struct SplashView: View {
                     HomeView()
                 }else
                 {
-                    IntroView(currentPage: 2)
+                    PremiumView(fromSplash:true)
                 }
                 
             }

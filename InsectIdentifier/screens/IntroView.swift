@@ -17,7 +17,6 @@ struct IntroView: View {
     @State  var currentPage = 0
     @EnvironmentObject var proState: ProState
     @EnvironmentObject var adVm: InterstitialViewModel
-    @State private var moveOnHomePage: Bool = false
     @State private var moveOnPremiumPage: Bool = false
     
 
@@ -49,12 +48,7 @@ struct IntroView: View {
                             currentPage = currentPage+1
                         }else{
                             isFirstRun=false
-                            if(currentPage == pages.count - 1){
-                                moveOnPremiumPage=true
-                            }else{
-                                moveOnHomePage=true
-                            }
-                          
+                            moveOnPremiumPage=true
                         }
                     }){
                         Text(currentPage == pages.count - 1 ? "pu" : "nt")
@@ -71,7 +65,7 @@ struct IntroView: View {
                             }
                         }
                         isFirstRun=false
-                        moveOnHomePage=true
+                        moveOnPremiumPage=true
                         
                     }){
                         Text(currentPage == pages.count - 1 ? "cwa" : "skp")
@@ -86,10 +80,15 @@ struct IntroView: View {
                 Spacer().frame(height: UIScreen.main.bounds.height * 0.05)
             }
             
-        }.navigationBarBackButtonHidden().navigationDestination(isPresented:$moveOnHomePage) {
-            HomeView()
-        }.navigationDestination(isPresented:$moveOnPremiumPage) {
-            PremiumView(fromSplash: true)
+        }.navigationBarBackButtonHidden().navigationDestination(isPresented:$moveOnPremiumPage) {
+            if proState.isProUser
+            {
+                HomeView()
+            }else
+            {
+                PremiumView(fromSplash: true)
+            }
+            
         }
         
     }
