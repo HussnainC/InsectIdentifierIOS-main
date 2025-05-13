@@ -51,7 +51,7 @@ struct IntroView: View {
                             moveOnPremiumPage=true
                         }
                     }){
-                        Text(currentPage == pages.count - 1 ? "pu" : "nt")
+                        Text("nt" )
                             .frame(maxWidth: .infinity)
                             .padding(.vertical,10)
                         
@@ -68,7 +68,7 @@ struct IntroView: View {
                         moveOnPremiumPage=true
                         
                     }){
-                        Text(currentPage == pages.count - 1 ? "cwa" : "skp")
+                        Text("skp")
                             .frame(maxWidth: .infinity)
                             .padding(.vertical,10)
                         
